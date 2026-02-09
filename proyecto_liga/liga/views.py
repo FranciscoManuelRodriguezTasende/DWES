@@ -3,50 +3,32 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.shortcuts import get_object_or_404
 from .models import Equipo
+from .serializers import EquipoSerializer
 
 
-# Vista para LISTAR y CREAR equipos
 class EquipoListAPIView(APIView):
+    # GET lista: Devuelve todos los equipos
     def get(self, request):
-        # 1. Sacamos los datos de la base de datos
         equipos = Equipo.objects.all()
-        # 2. Construimos el JSON a mano (como pide el Bloque 1)
-        data = []
-        for e in equipos:
-            data.append({
-                "id": e.id,
-                "nombre": e.nombre,
-                "ciudad": e.ciudad,
-                "fundacion": e.fundacion
-            })
-        return Response(data)
+        # 'many=True' indica que estamos traduciendo una lista
+        serializer = EquipoSerializer(equipos, many=True)
+        return Response(serializer.data)
 
+    # POST crear: Recibe JSON y lo guarda en la BD
     def post(self, request):
-        # 1. Recibimos los datos que nos envían
-        nombre = request.data.get('nombre')
-        ciudad = request.data.get('ciudad')
-        fundacion = request.data.get('fundacion')
+        serializer = EquipoSerializer(data=request.data)
+        # DRF valida automáticamente tipos y campos obligatorios
+        if serializer.is_valid():
+            serializer.save()  # Guarda el objeto
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-        # 2. Creamos el equipo en la base de datos
-        nuevo_equipo = Equipo.objects.create(
-            nombre=nombre,
-            ciudad=ciudad,
-            fundacion=fundacion
-        )
-
-        # 3. Respondemos que se ha creado correctamente
-        return Response({"mensaje": "Equipo creado"}, status=status.HTTP_201_CREATED)
+        # Si hay errores (ej: nombre repetido), devuelve un 400
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-# Vista para el DETALLE de un equipo específico
 class EquipoDetailAPIView(APIView):
+    # GET detalle: Devuelve un único equipo por su ID
     def get(self, request, pk):
-        # Buscamos el equipo por su ID o devolvemos error 404
         equipo = get_object_or_404(Equipo, pk=pk)
-        data = {
-            "id": equipo.id,
-            "nombre": equipo.nombre,
-            "ciudad": equipo.ciudad,
-            "fundacion": equipo.fundacion
-        }
-        return Response(data)
+        serializer = EquipoSerializer(equipo)
+        return Response(serializer.data)
