@@ -1,15 +1,17 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import EquipoViewSet, JugadorViewSet
+from .views import (
+    EquipoViewSet, JugadorViewSet, EstadioViewSet,
+    PartidoViewSet, EstadisticaViewSet # <--- ¡Asegúrate de que estén todas aquí!
+)
 
-# 1. Creamos el router
 router = DefaultRouter()
-
-# 2. Registramos los recursos de tu liga
 router.register(r'equipos', EquipoViewSet, basename='equipo')
 router.register(r'jugadores', JugadorViewSet, basename='jugador')
+router.register(r'estadios', EstadioViewSet, basename='estadio')
+router.register(r'partidos', PartidoViewSet, basename='partido')
+router.register(r'estadisticas', EstadisticaViewSet, basename='estadistica')
 
-# 3. Las URLs de la API ahora las gestiona el router
 urlpatterns = [
     path('', include(router.urls)),
 ]
