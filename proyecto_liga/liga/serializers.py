@@ -33,3 +33,6 @@ class EstadisticaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Estadistica
         fields = ['id', 'jugador', 'partido', 'goles', 'minutos_jugados']
+
+        class FicharJugadorSerializer(serializers.Serializer):
+            jugador_id = serializers.IntegerField(help_text="ID del jugador que quieres fichar")
