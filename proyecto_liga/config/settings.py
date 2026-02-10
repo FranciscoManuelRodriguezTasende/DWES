@@ -40,7 +40,16 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'liga',
+    'django_filters',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend', #
+    ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination', #
+    'PAGE_SIZE': 5 # Devolveremos los datos de 5 en 5
+}
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
