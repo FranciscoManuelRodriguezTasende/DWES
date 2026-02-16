@@ -4,11 +4,15 @@ $db = mysqli_connect('localhost', 'root', '1234', 'web_canciones') or die('Fail'
 ?>
 <html>
 <head>
-    <style>
-        /* Ejercicio 7 Sprint 3: Animación hover  */
-        li { transition: all 0.3s ease; padding: 10px; border-bottom: 1px solid #eee; }
-        li:hover { background: #f9f9f9; transform: translateX(10px); opacity: 0.8; }
-    </style>
+	<style>
+li {
+    transition: all 0.3s ease; /* Transición suave [cite: 238] */
+}
+li:hover {
+    opacity: 0.7;
+    transform: translateX(10px); /* Pequeño desplazamiento al pasar el ratón */
+}
+</style>
 </head>
 <body>
     <h1>Canciones Disponibles</h1>

@@ -5,10 +5,25 @@
 </head>
 <body>
     <h1>Login</h1>
-    <form action="login.php" method="post">
-        <input name="f_email" type="text" placeholder="e-mail"><br>
-        <input name="f_password" type="password" placeholder="Contraseña"><br>
+    <form id="formularioLogin" action="login.php" method="post">
+        <input name="f_email" id="email" type="text" placeholder="e-mail"><br>
+        <input name="f_password" id="pass" type="password" placeholder="Contraseña"><br>
         <input type="submit" value="Iniciar sesión">
     </form>
+    <script> 
+        document.getElementById('formularioLogin').onsubmit = function(event) {
+            // Obtenemos los valores de los campos
+            var email = document.getElementById('email').value;
+            var password = document.getElementById('pass').value;
+
+            // Comprobamos si alguno de los campos está vacío
+            if (email.trim() === "" || password.trim() === "") {
+                // Detenemos el envío del formulario 
+                event.preventDefault();
+                // Mostramos la alerta requerida 
+                alert("Error: No puedes dejar campos vacíos en el formulario.");
+            }
+        };
+    </script>
 </body>
 </html>
