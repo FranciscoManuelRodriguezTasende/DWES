@@ -3,38 +3,35 @@ session_start();
 $db = mysqli_connect('localhost', 'root', '1234', 'web_canciones') or die('Fail');
 ?>
 <html>
-<head>
-	<style>
-li {
-    transition: all 0.3s ease; /* Transición suave [cite: 238] */
-}
-li:hover {
-    opacity: 0.7;
-    transform: translateX(10px); /* Pequeño desplazamiento al pasar el ratón */
-}
-</style>
-</head>
 <body>
-    <h1>Canciones Disponibles</h1>
-    
-    <?php if (isset($_SESSION['user_id'])): ?>
-        <p>Conectado como ID: <?php echo $_SESSION['user_id']; ?> | <a href="logout.php">Logout</a></p>
-    <?php else: ?>
-        <p><a href="login.html">Login</a> | <a href="register.html">Registro</a></p>
-    <?php endif; ?>
+    <h1>Web de Canciones</h1>
 
+    <?php
+    // Comprobamos si el usuario está logueado para mostrar opciones [cite: 179, 232]
+    if (isset($_SESSION['user_id'])) {
+        echo "<p>Identificado como usuario: " . $_SESSION['user_id'] . "</p>";
+        echo "<a href='changepassword.html'>Cambiar contraseña</a> | ";
+        echo "<a href='logout.php'>Cerrar sesión</a>";
+    } else {
+        echo "<a href='login.html'>Iniciar sesión</a> | <a href='register.html'>Registrarse</a>";
+    }
+    ?>
+
+    <h3>Lista de canciones:</h3>
     <ul>
         <?php
+        // Listado básico del Sprint 2 [cite: 298-301]
         $query = "SELECT * FROM tCancion";
         $result = mysqli_query($db, $query);
-        // Recorrer el resultado con while 
         while ($row = mysqli_fetch_array($result)) {
-            echo "<li>";
-            echo "<a href='detail.php?cancion_id=".$row['id']."'>";
-            echo $row['titulo']." (".$row['artista'].")"; // Acceso por nombre de columna [cite: 315]
+            // Enlace dinámico a la página de detalle [cite: 487-488]
+            echo "<li><a href='detail.php?cancion_id=".$row['id']."'>";
+            echo $row['titulo'];
             echo "</a></li>";
         }
         ?>
     </ul>
+
+    <?php mysqli_close($db); ?>
 </body>
 </html>
